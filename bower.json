@@ -1,0 +1,33 @@
+{
+  "name": "izitin",
+  "version": "0.1.0",
+  "description": "check if elements are in viewport",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/iamso/izitin.git"
+  },
+  "authors": [
+    "Steve Ottoz <so@dev.so>"
+  ],
+  "main": "dist/izitin.next.js",
+  "license": "MIT",
+  "homepage": "https://github.com/iamso/izitin",
+  "ignore": [
+    ".bower.json",
+    ".config",
+    ".editorconfig",
+    ".git",
+    ".gitattributes",
+    ".gitignore",
+    "demo",
+    "doc",
+    "extensions",
+    "gulpfile.js",
+    "node_modules",
+    "src"
+  ],
+  "keywords": [
+    "viewport"
+  ],
+  "dependencies": {}
+}

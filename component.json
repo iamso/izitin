@@ -1,0 +1,16 @@
+{
+  "name": "izitin",
+  "repository": "iamso/izitin",
+  "description": "check if elements are in viewport",
+  "version": "0.1.0",
+  "keywords": [
+    "viewport"
+  ],
+  "scripts": [
+    "dist/izitin.js",
+    "dist/izitin.min.js",
+    "dist/izitin.next.js",
+    "dist/izitin.next.min.js"
+  ],
+  "license": "MIT"
+}
