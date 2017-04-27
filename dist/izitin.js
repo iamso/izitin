@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.3.0
+ * izitin - version 0.3.1
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -149,7 +149,6 @@
                 }
                 count++;
               } else {
-                item.style.transitionDelay = '';
                 item.classList.add('itizin');
               }
             } else if (_this.remove) {
