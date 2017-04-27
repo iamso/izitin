@@ -21,6 +21,7 @@ Example Setup
 -------------
 
 ### Javascript
+
 ```javascript
 import Izitin from 'izitin';
 
@@ -39,6 +40,7 @@ const izitin = new Izitin({
 ```
 
 The callback function `fn` receives an object with the following content:
+
 ```javascript
 {
   index: // the index of the items
@@ -50,9 +52,22 @@ The callback function `fn` receives an object with the following content:
 }
 ```
 
+You can also trigger a check manually, might be useful for ajax websites:
+
+```javascript
+izitin.check();
+```
+
+If you don't need it anymore, you can dispose of it properly:
+
+```javascript
+izitin.destroy();
+delete izitin;
+```
+
 ### CSS
 
-The plugin adds the following classes to items:
+Izitin adds the following classes to items:
 ```css
 .itizin {} /* the item is in the viewport */
 .izitin-above {} /* the item is above the viewport */
