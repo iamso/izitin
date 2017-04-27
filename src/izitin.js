@@ -96,7 +96,6 @@ export default class Izitin {
             count++;
           }
           else {
-            item.style.transitionDelay = '';
             item.classList.add('itizin');
           }
         }
