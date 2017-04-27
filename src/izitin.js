@@ -7,13 +7,15 @@ export default class Izitin {
     container = document,
     items = '.izitin',
     stagger = 100,
-    remove = false
+    css = true,
+    remove = false,
   } = {}) {
     this.fraction = Math.max(Math.min(+fraction, 1), 0);
     this.fn = fn;
     this.container = container instanceof Node ? container : document.querySelector(container);
     this.items = items;
     this.stagger = +stagger;
+    this.css = !!css;
     this.remove = !!remove;
     this.init();
   }
@@ -74,9 +76,15 @@ export default class Izitin {
 
         if (itizin) {
           if (this.stagger && !item.classList.contains('itizin')) {
-            setTimeout(() => {
+            if (this.css) {
+              item.style.transitionDelay = `${this.stagger * count}ms`;
               item.classList.add('itizin');
-            }, this.stagger * count);
+            }
+            else {
+              setTimeout(() => {
+                item.classList.add('itizin');
+              }, this.stagger * count);
+            }
             count++;
           }
           else {
@@ -84,7 +92,11 @@ export default class Izitin {
           }
         }
         else if (this.remove) {
+          item.style.transitionDelay = '';
           item.classList.remove('itizin');
+        }
+        else {
+          item.style.transitionDelay = '';
         }
 
 
