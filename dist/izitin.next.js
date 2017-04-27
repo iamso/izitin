@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.2.0
+ * izitin - version 0.3.0
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -30,20 +30,20 @@ export default class Izitin {
   }
   init() {
     this.lastPosition = window.pageYOffset || document.documentElement.scrollTop;
-    // this.handler();
+    this.check();
     if (!this.isInitialized) {
       if (this.throttle) {
-        this._handler = this.throttling(this.handler.bind(this), this.throttle).bind(this);
+        this.handler = this.throttling(this.check.bind(this), this.throttle).bind(this);
       } else {
-        this._handler = this.handler.bind(this);
+        this.handler = this.check.bind(this);
       }
-      window.addEventListener('scroll', this._handler);
-      window.addEventListener('load', this._handler);
-      window.addEventListener('resize', this._handler);
+      window.addEventListener('scroll', this.handler);
+      window.addEventListener('load', this.handler);
+      window.addEventListener('resize', this.handler);
       this.isInitialized = true;
     }
   }
-  handler(e) {
+  check(e) {
     const curPosition = window.pageYOffset || document.documentElement.scrollTop;
     const up = this.lastPosition > curPosition;
     let count = 0;
@@ -160,9 +160,9 @@ export default class Izitin {
       item.classList.remove('izitin-left');
       item.classList.remove('izitin-right');
     });
-    window.removeEventListener('scroll', this._handler);
-    window.removeEventListener('load', this._handler);
-    window.removeEventListener('resize', this._handler);
+    window.removeEventListener('scroll', this.handler);
+    window.removeEventListener('load', this.handler);
+    window.removeEventListener('resize', this.handler);
     this.isInitialized = false;
   }
 }
