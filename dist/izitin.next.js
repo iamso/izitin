@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.1.0
+ * izitin - version 0.2.0
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -14,21 +14,29 @@ export default class Izitin {
     container = document,
     items = '.izitin',
     stagger = 100,
-    remove = false
+    css = true,
+    remove = false,
+    throttle = 0
   } = {}) {
     this.fraction = Math.max(Math.min(+fraction, 1), 0);
     this.fn = fn;
     this.container = container instanceof Node ? container : document.querySelector(container);
     this.items = items;
     this.stagger = +stagger;
+    this.css = !!css;
     this.remove = !!remove;
+    this.throttle = +throttle;
     this.init();
   }
   init() {
     this.lastPosition = window.pageYOffset || document.documentElement.scrollTop;
-    this.handler();
+    // this.handler();
     if (!this.isInitialized) {
-      this._handler = this.handler.bind(this);
+      if (this.throttle) {
+        this._handler = this.throttling(this.handler.bind(this), this.throttle).bind(this);
+      } else {
+        this._handler = this.handler.bind(this);
+      }
       window.addEventListener('scroll', this._handler);
       window.addEventListener('load', this._handler);
       window.addEventListener('resize', this._handler);
@@ -37,12 +45,13 @@ export default class Izitin {
   }
   handler(e) {
     const curPosition = window.pageYOffset || document.documentElement.scrollTop;
+    const up = this.lastPosition > curPosition;
     let count = 0;
     let items = this.container.querySelectorAll(this.items);
-    if (this.lastPosition > curPosition) {
+    if (up) {
       items = [].slice.call(items, 0).reverse();
     }
-    items.forEach(item => {
+    items.forEach((item, i) => {
       let rect;
       let wWidth;
       let wHeight;
@@ -70,15 +79,24 @@ export default class Izitin {
 
         if (itizin) {
           if (this.stagger && !item.classList.contains('itizin')) {
-            setTimeout(() => {
+            if (this.css) {
+              item.style.transitionDelay = `${ this.stagger * count }ms`;
               item.classList.add('itizin');
-            }, this.stagger * count);
+            } else {
+              setTimeout(() => {
+                item.classList.add('itizin');
+              }, this.stagger * count);
+            }
             count++;
           } else {
+            item.style.transitionDelay = '';
             item.classList.add('itizin');
           }
         } else if (this.remove) {
+          item.style.transitionDelay = '';
           item.classList.remove('itizin');
+        } else {
+          item.style.transitionDelay = '';
         }
 
         if (position.above) {
@@ -106,6 +124,8 @@ export default class Izitin {
         }
       } catch (e) {}
       const data = {
+        index: i,
+        direction: up ? 'up' : 'down',
         target: item,
         izitin: itizin,
         position: position,
@@ -113,6 +133,24 @@ export default class Izitin {
       };
       this.fn && this.fn.apply(item, [data]);
     });
+  }
+  throttling(fn, threshhold = 50) {
+    let last;
+    let deferTimer;
+    return (...args) => {
+      const now = Date.now();
+      if (last && now < last + threshhold) {
+        // hold on to it
+        clearTimeout(deferTimer);
+        deferTimer = setTimeout(function () {
+          last = now;
+          fn.apply(this, args);
+        }, threshhold);
+      } else {
+        last = now;
+        fn.apply(this, args);
+      }
+    };
   }
   destroy() {
     this.container.querySelectorAll(this.items).forEach(item => {

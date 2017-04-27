@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.1.0
+ * izitin - version 0.2.0
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -62,8 +62,12 @@
       var items = _ref$items === undefined ? '.izitin' : _ref$items;
       var _ref$stagger = _ref.stagger;
       var stagger = _ref$stagger === undefined ? 100 : _ref$stagger;
+      var _ref$css = _ref.css;
+      var css = _ref$css === undefined ? true : _ref$css;
       var _ref$remove = _ref.remove;
       var remove = _ref$remove === undefined ? false : _ref$remove;
+      var _ref$throttle = _ref.throttle;
+      var throttle = _ref$throttle === undefined ? 0 : _ref$throttle;
 
       _classCallCheck(this, Izitin);
 
@@ -72,7 +76,9 @@
       this.container = container instanceof Node ? container : document.querySelector(container);
       this.items = items;
       this.stagger = +stagger;
+      this.css = !!css;
       this.remove = !!remove;
+      this.throttle = +throttle;
       this.init();
     }
 
@@ -80,9 +86,13 @@
       key: 'init',
       value: function init() {
         this.lastPosition = window.pageYOffset || document.documentElement.scrollTop;
-        this.handler();
+        // this.handler();
         if (!this.isInitialized) {
-          this._handler = this.handler.bind(this);
+          if (this.throttle) {
+            this._handler = this.throttling(this.handler.bind(this), this.throttle).bind(this);
+          } else {
+            this._handler = this.handler.bind(this);
+          }
           window.addEventListener('scroll', this._handler);
           window.addEventListener('load', this._handler);
           window.addEventListener('resize', this._handler);
@@ -95,12 +105,13 @@
         var _this = this;
 
         var curPosition = window.pageYOffset || document.documentElement.scrollTop;
+        var up = this.lastPosition > curPosition;
         var count = 0;
         var items = this.container.querySelectorAll(this.items);
-        if (this.lastPosition > curPosition) {
+        if (up) {
           items = [].slice.call(items, 0).reverse();
         }
-        items.forEach(function (item) {
+        items.forEach(function (item, i) {
           var rect = void 0;
           var wWidth = void 0;
           var wHeight = void 0;
@@ -128,15 +139,24 @@
 
             if (itizin) {
               if (_this.stagger && !item.classList.contains('itizin')) {
-                setTimeout(function () {
+                if (_this.css) {
+                  item.style.transitionDelay = _this.stagger * count + 'ms';
                   item.classList.add('itizin');
-                }, _this.stagger * count);
+                } else {
+                  setTimeout(function () {
+                    item.classList.add('itizin');
+                  }, _this.stagger * count);
+                }
                 count++;
               } else {
+                item.style.transitionDelay = '';
                 item.classList.add('itizin');
               }
             } else if (_this.remove) {
+              item.style.transitionDelay = '';
               item.classList.remove('itizin');
+            } else {
+              item.style.transitionDelay = '';
             }
 
             if (position.above) {
@@ -164,6 +184,8 @@
             }
           } catch (e) {}
           var data = {
+            index: i,
+            direction: up ? 'up' : 'down',
             target: item,
             izitin: itizin,
             position: position,
@@ -171,6 +193,34 @@
           };
           _this.fn && _this.fn.apply(item, [data]);
         });
+      }
+    }, {
+      key: 'throttling',
+      value: function throttling(fn) {
+        var _this2 = this;
+
+        var threshhold = arguments.length <= 1 || arguments[1] === undefined ? 50 : arguments[1];
+
+        var last = void 0;
+        var deferTimer = void 0;
+        return function () {
+          for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
+            args[_key] = arguments[_key];
+          }
+
+          var now = Date.now();
+          if (last && now < last + threshhold) {
+            // hold on to it
+            clearTimeout(deferTimer);
+            deferTimer = setTimeout(function () {
+              last = now;
+              fn.apply(this, args);
+            }, threshhold);
+          } else {
+            last = now;
+            fn.apply(_this2, args);
+          }
+        };
       }
     }, {
       key: 'destroy',
