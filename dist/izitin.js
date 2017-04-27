@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.3.1
+ * izitin - version 0.3.2
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -107,9 +107,9 @@
         var curPosition = window.pageYOffset || document.documentElement.scrollTop;
         var up = this.lastPosition > curPosition;
         var count = 0;
-        var items = this.container.querySelectorAll(this.items);
+        var items = [].slice.call(this.container.querySelectorAll(this.items), 0);
         if (up) {
-          items = [].slice.call(items, 0).reverse();
+          items = items.reverse();
         }
         items.forEach(function (item, i) {
           var rect = void 0;

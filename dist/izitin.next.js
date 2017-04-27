@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.3.1
+ * izitin - version 0.3.2
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -47,9 +47,9 @@ export default class Izitin {
     const curPosition = window.pageYOffset || document.documentElement.scrollTop;
     const up = this.lastPosition > curPosition;
     let count = 0;
-    let items = this.container.querySelectorAll(this.items);
+    let items = [].slice.call(this.container.querySelectorAll(this.items), 0);
     if (up) {
-      items = [].slice.call(items, 0).reverse();
+      items = items.reverse();
     }
     items.forEach((item, i) => {
       let rect;
