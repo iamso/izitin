@@ -65,9 +65,10 @@ izitin.destroy();
 delete izitin;
 ```
 
-### CSS
+### CSS
 
 Izitin adds the following classes to items:
+
 ```css
 .itizin {} /* the item is in the viewport */
 .izitin-above {} /* the item is above the viewport */
