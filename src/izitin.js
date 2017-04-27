@@ -45,7 +45,7 @@ export default class Izitin {
     if (up) {
       items = [].slice.call(items, 0).reverse();
     }
-    items.forEach(item => {
+    items.forEach((item, i) => {
       let rect;
       let wWidth;
       let wHeight;
@@ -139,6 +139,7 @@ export default class Izitin {
       }
       catch(e) {}
       const data = {
+        index: i,
         direction: up ? 'up' : 'down',
         target: item,
         izitin: itizin,
