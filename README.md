@@ -31,7 +31,9 @@ const izitin = new Izitin({
   container: document, // the selector or dom element for the container
   items: '.izitin', // the selector for the items
   stagger: 100, // duration for stagger (in ms)
-  remove: false // remove class when out of viewport
+  css: true, // use css transition-delay for staggering
+  remove: false, // remove class when out of viewport
+  throttle: 0 // throttle the event listener (in ms)
 });
 
 ```
@@ -39,6 +41,8 @@ const izitin = new Izitin({
 The callback function `fn` receives an object with the following content:
 ```javascript
 {
+  index: // the index of the items
+  direction: // the scroll direction
   target: // the DOM element
   izitin: // boolean, true if in viewport
   position: // where in relation to the viewport is the element
