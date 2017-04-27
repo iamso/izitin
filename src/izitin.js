@@ -39,9 +39,10 @@ export default class Izitin {
   }
   handler(e) {
     const curPosition = window.pageYOffset || document.documentElement.scrollTop;
+    const up = this.lastPosition > curPosition;
     let count = 0;
     let items = this.container.querySelectorAll(this.items);
-    if (this.lastPosition > curPosition) {
+    if (up) {
       items = [].slice.call(items, 0).reverse();
     }
     items.forEach(item => {
@@ -138,6 +139,7 @@ export default class Izitin {
       }
       catch(e) {}
       const data = {
+        direction: up ? 'up' : 'down',
         target: item,
         izitin: itizin,
         position: position,
