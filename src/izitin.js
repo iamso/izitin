@@ -9,6 +9,7 @@ export default class Izitin {
     stagger = 100,
     css = true,
     remove = false,
+    throttle = 0
   } = {}) {
     this.fraction = Math.max(Math.min(+fraction, 1), 0);
     this.fn = fn;
@@ -17,13 +18,19 @@ export default class Izitin {
     this.stagger = +stagger;
     this.css = !!css;
     this.remove = !!remove;
+    this.throttle = +throttle;
     this.init();
   }
   init() {
     this.lastPosition = window.pageYOffset || document.documentElement.scrollTop;
-    this.handler();
+    // this.handler();
     if (!this.isInitialized) {
-      this._handler = this.handler.bind(this);
+      if (this.throttle) {
+        this._handler = this.throttling(this.handler.bind(this), this.throttle).bind(this);
+      }
+      else {
+        this._handler = this.handler.bind(this);
+      }
       window.addEventListener('scroll', this._handler);
       window.addEventListener('load', this._handler);
       window.addEventListener('resize', this._handler);
@@ -137,6 +144,25 @@ export default class Izitin {
       };
       this.fn && this.fn.apply(item, [data]);
     });
+  }
+  throttling(fn, threshhold = 50) {
+    let last;
+    let deferTimer;
+    return (...args) => {
+      const now = Date.now();
+      if (last && now < last + threshhold) {
+        // hold on to it
+        clearTimeout(deferTimer);
+        deferTimer = setTimeout(function () {
+          last = now;
+          fn.apply(this, args);
+        }, threshhold);
+      }
+      else {
+        last = now;
+        fn.apply(this, args);
+      }
+    };
   }
   destroy() {
     this.container.querySelectorAll(this.items).forEach(item => {
