@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.4.0
+ * izitin - version 0.4.1
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -225,6 +225,7 @@
       key: 'reset',
       value: function reset() {
         [].slice.call(this.container.querySelectorAll(this.items)).forEach(function (item) {
+          item.style.transitionDelay = '';
           item.classList.remove('itizin');
           item.classList.remove('izitin-above');
           item.classList.remove('izitin-below');
