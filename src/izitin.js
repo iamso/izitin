@@ -169,6 +169,7 @@ export default class Izitin {
   }
   reset() {
     [].slice.call(this.container.querySelectorAll(this.items)).forEach(item => {
+      item.style.transitionDelay = '';
       item.classList.remove('itizin');
       item.classList.remove('izitin-above');
       item.classList.remove('izitin-below');
