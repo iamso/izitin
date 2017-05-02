@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.3.2
+ * izitin - version 0.4.0
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -222,15 +222,20 @@
         };
       }
     }, {
-      key: 'destroy',
-      value: function destroy() {
-        this.container.querySelectorAll(this.items).forEach(function (item) {
+      key: 'reset',
+      value: function reset() {
+        [].slice.call(this.container.querySelectorAll(this.items)).forEach(function (item) {
           item.classList.remove('itizin');
           item.classList.remove('izitin-above');
           item.classList.remove('izitin-below');
           item.classList.remove('izitin-left');
           item.classList.remove('izitin-right');
         });
+      }
+    }, {
+      key: 'destroy',
+      value: function destroy() {
+        this.reset();
         window.removeEventListener('scroll', this.handler);
         window.removeEventListener('load', this.handler);
         window.removeEventListener('resize', this.handler);
