@@ -167,14 +167,17 @@ export default class Izitin {
       }
     };
   }
-  destroy() {
-    this.container.querySelectorAll(this.items).forEach(item => {
+  reset() {
+    [].slice.call(this.container.querySelectorAll(this.items)).forEach(item => {
       item.classList.remove('itizin');
       item.classList.remove('izitin-above');
       item.classList.remove('izitin-below');
       item.classList.remove('izitin-left');
       item.classList.remove('izitin-right');
     });
+  }
+  destroy() {
+    this.reset();
     window.removeEventListener('scroll', this.handler);
     window.removeEventListener('load', this.handler);
     window.removeEventListener('resize', this.handler);
