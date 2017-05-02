@@ -58,6 +58,12 @@ You can also trigger a check manually, might be useful for ajax websites:
 izitin.check();
 ```
 
+Or you can reset the classes on all items:
+
+```javascript
+izitin.reset();
+```
+
 If you don't need it anymore, you can dispose of it properly:
 
 ```javascript
