@@ -35,6 +35,7 @@ const izitin = new Izitin({
   css: true, // use css transition-delay for staggering
   remove: false, // remove class when out of viewport
   throttle: 0 // throttle the event listener (in ms)
+  detectUp: true // reverse item order if scrolled up
 });
 
 ```
