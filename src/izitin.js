@@ -9,7 +9,8 @@ export default class Izitin {
     stagger = 100,
     css = true,
     remove = false,
-    throttle = 0
+    throttle = 0,
+    detectUp = true
   } = {}) {
     this.fraction = Math.max(Math.min(+fraction, 1), 0);
     this.fn = fn;
@@ -19,6 +20,7 @@ export default class Izitin {
     this.css = !!css;
     this.remove = !!remove;
     this.throttle = +throttle;
+    this.detectUp = !!detectUp;
     this.init();
   }
   init() {
@@ -42,7 +44,7 @@ export default class Izitin {
     const up = this.lastPosition > curPosition;
     let count = 0;
     let items = [].slice.call(this.container.querySelectorAll(this.items), 0);
-    if (up) {
+    if (this.detectUp && up) {
       items = items.reverse();
     }
     items.forEach((item, i) => {
