@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.4.1
+ * izitin - version 0.5.0
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
@@ -68,6 +68,8 @@
       var remove = _ref$remove === undefined ? false : _ref$remove;
       var _ref$throttle = _ref.throttle;
       var throttle = _ref$throttle === undefined ? 0 : _ref$throttle;
+      var _ref$detectUp = _ref.detectUp;
+      var detectUp = _ref$detectUp === undefined ? true : _ref$detectUp;
 
       _classCallCheck(this, Izitin);
 
@@ -79,6 +81,7 @@
       this.css = !!css;
       this.remove = !!remove;
       this.throttle = +throttle;
+      this.detectUp = !!detectUp;
       this.init();
     }
 
@@ -108,7 +111,7 @@
         var up = this.lastPosition > curPosition;
         var count = 0;
         var items = [].slice.call(this.container.querySelectorAll(this.items), 0);
-        if (up) {
+        if (this.detectUp && up) {
           items = items.reverse();
         }
         items.forEach(function (item, i) {
