@@ -77,10 +77,10 @@
       this.fn = fn;
       this.container = container instanceof Node ? container : document.querySelector(container);
       this.items = items;
-      this.stagger = +stagger;
+      this.stagger = ~~stagger;
       this.css = !!css;
       this.remove = !!remove;
-      this.throttle = +throttle;
+      this.throttle = ~~throttle;
       this.detectUp = !!detectUp;
       this.init();
     }
@@ -111,6 +111,7 @@
         var up = this.lastPosition > curPosition;
         var count = 0;
         var items = [].slice.call(this.container.querySelectorAll(this.items), 0);
+        var stagger = 0;
         if (this.detectUp && up) {
           items = items.reverse();
         }
@@ -141,18 +142,21 @@
             }
 
             if (itizin) {
-              if (_this.stagger && !item.classList.contains('itizin')) {
-                if (_this.css) {
-                  item.style.transitionDelay = _this.stagger * count + 'ms';
-                  item.classList.add('itizin');
-                } else {
-                  setTimeout(function () {
+              if (!item.classList.contains('itizin')) {
+                stagger += ~~item.dataset.izitinStagger || _this.stagger;
+                if (stagger) {
+                  if (_this.css) {
+                    item.style.transitionDelay = stagger + 'ms';
                     item.classList.add('itizin');
-                  }, _this.stagger * count);
+                  } else {
+                    setTimeout(function () {
+                      item.classList.add('itizin');
+                    }, stagger * count);
+                  }
+                  count++;
+                } else {
+                  item.classList.add('itizin');
                 }
-                count++;
-              } else {
-                item.classList.add('itizin');
               }
             } else if (_this.remove) {
               item.style.transitionDelay = '';
@@ -191,7 +195,8 @@
             target: item,
             izitin: itizin,
             position: position,
-            rect: rect
+            rect: rect,
+            stagger: stagger
           };
           _this.fn && _this.fn.apply(item, [data]);
         });

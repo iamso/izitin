@@ -23,10 +23,10 @@ export default class Izitin {
     this.fn = fn;
     this.container = container instanceof Node ? container : document.querySelector(container);
     this.items = items;
-    this.stagger = +stagger;
+    this.stagger = ~~stagger;
     this.css = !!css;
     this.remove = !!remove;
-    this.throttle = +throttle;
+    this.throttle = ~~throttle;
     this.detectUp = !!detectUp;
     this.init();
   }
@@ -50,6 +50,7 @@ export default class Izitin {
     const up = this.lastPosition > curPosition;
     let count = 0;
     let items = [].slice.call(this.container.querySelectorAll(this.items), 0);
+    let stagger = 0;
     if (this.detectUp && up) {
       items = items.reverse();
     }
@@ -80,18 +81,21 @@ export default class Izitin {
         }
 
         if (itizin) {
-          if (this.stagger && !item.classList.contains('itizin')) {
-            if (this.css) {
-              item.style.transitionDelay = `${ this.stagger * count }ms`;
-              item.classList.add('itizin');
-            } else {
-              setTimeout(() => {
+          if (!item.classList.contains('itizin')) {
+            stagger += ~~item.dataset.izitinStagger || this.stagger;
+            if (stagger) {
+              if (this.css) {
+                item.style.transitionDelay = `${ stagger }ms`;
                 item.classList.add('itizin');
-              }, this.stagger * count);
+              } else {
+                setTimeout(() => {
+                  item.classList.add('itizin');
+                }, stagger * count);
+              }
+              count++;
+            } else {
+              item.classList.add('itizin');
             }
-            count++;
-          } else {
-            item.classList.add('itizin');
           }
         } else if (this.remove) {
           item.style.transitionDelay = '';
@@ -130,7 +134,8 @@ export default class Izitin {
         target: item,
         izitin: itizin,
         position: position,
-        rect: rect
+        rect: rect,
+        stagger: stagger
       };
       this.fn && this.fn.apply(item, [data]);
     });

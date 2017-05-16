@@ -1,6 +1,6 @@
 {
   "name": "izitin",
-  "version": "0.5.0",
+  "version": "0.6.0",
   "description": "check if elements are in viewport",
   "repository": {
     "type": "git",
