@@ -84,6 +84,14 @@ Izitin adds the following classes to items:
 .izitin-right {} /* the item is right of the viewport */
 ```
 
+### HTML
+
+You can add custom values for staggering individual elements:
+
+```html
+<div class="izitin" data-izitin-stagger="200"></div>
+```
+
 License
 -------
 
