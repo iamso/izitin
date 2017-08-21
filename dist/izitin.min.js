@@ -1,5 +1,5 @@
 /*!
- * izitin - version 0.5.0
+ * izitin - version 0.6.1
  *
  * Made with ❤ by Steve Ottoz so@dev.so
  *
